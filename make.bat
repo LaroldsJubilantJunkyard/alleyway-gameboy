@@ -12,7 +12,7 @@ call generate-graphics.bat
 SET GBDK_HOME=C:/gbdk
 SET HUGETRACKER_DIR=%GBDK_HOME%/lib/hUGETracker_1_0b9/hUGEDriver
 
-SET LCC_COMPILE_BASE=%GBDK_HOME%\bin\lcc -Iheaders -I%HUGETRACKER_DIR% -Wa-l -Wl-m -Wl-j -DUSE_SFR_FOR_REG
+SET LCC_COMPILE_BASE=%GBDK_HOME%\bin\lcc -Iheaders/gen -Iheaders/main -Wa-l -Wl-m -Wl-j -DUSE_SFR_FOR_REG
 SET LCC_COMPILE=%LCC_COMPILE_BASE% -c -o 
 
 :: Assemble the hUGEDriver source into an RGBDS object file
@@ -27,40 +27,21 @@ SETLOCAL ENABLEDELAYEDEXPANSION
 SET "COMPILE_OBJECT_FILES="
 
 :: loop for all files in the default source folder
-FOR %%X IN (source/default/*.c) DO (
-    %LCC_COMPILE% bin/%%~nX.o source/default/%%X
-    SET "COMPILE_OBJECT_FILES=bin/%%~nX.o !COMPILE_OBJECT_FILES!"
+FOR /R "source/gen/" %%X IN (*.c) DO (
+    echo Compiling %%~nX ...
+    %LCC_COMPILE% bin/gen_%%~nX.o %%X
+    SET "COMPILE_OBJECT_FILES=bin/gen_%%~nX.o !COMPILE_OBJECT_FILES!"
 
-    echo Compiling %%X...
 )
 
 
-:: loop for all files in the bank2 folder
-FOR %%X IN (source/bank1/*.c) DO (
-    %LCC_COMPILE_BASE% -Wf-bo1  -Wf-ba1 -c -o bin/%%~nX.o source/bank1/%%X    
+:: loop for all files in the default source folder
+FOR /R "source/default/" %%X IN (*.c) DO (
+    echo Compiling %%~nX ...
+    %LCC_COMPILE% bin/%%~nX.o %%X
     SET "COMPILE_OBJECT_FILES=bin/%%~nX.o !COMPILE_OBJECT_FILES!"
 
-    echo Compiling %%X...
 )
-
-
-:: loop for all files in the bank2 folder
-FOR %%X IN (source/bank2/*.c) DO (
-    %LCC_COMPILE_BASE% -Wf-bo2  -Wf-ba2 -c -o bin/%%~nX.o source/bank2/%%X    
-    SET "COMPILE_OBJECT_FILES=bin/%%~nX.o !COMPILE_OBJECT_FILES!"
-
-    echo Compiling %%X...
-)
-
-:: loop for all files in the bank3 folder
-FOR %%X IN (source/bank3/*.c) DO (
-    %LCC_COMPILE_BASE% -Wf-bo3  -Wf-ba3 -c -o bin/%%~nX.o source/bank3/%%X    
-    SET "COMPILE_OBJECT_FILES=bin/%%~nX.o !COMPILE_OBJECT_FILES!"
-
-    echo Compiling %%X...
-)
-
-
 :: Compile a .gb file from the compiled .o files
 %LCC_COMPILE_BASE% -Wm-yC -Wl-yt3 -Wl-yo4 -Wl-ya4 -o dist/BrickBreaker.gb !COMPILE_OBJECT_FILES!
 
