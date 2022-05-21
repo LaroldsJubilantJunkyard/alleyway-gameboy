@@ -63,13 +63,13 @@ void main(void){
     stage=0;
 
     ResetUserInterface();
-
+ 
 
     LevelStart:
 
     ballState = BALLSTATE_READY;
 
-    UpdateBackgroundFull(level);
+    DrawLevelBricks(level);
     ResetPaddle();
     ResetBall();
 

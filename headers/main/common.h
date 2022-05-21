@@ -65,5 +65,6 @@ extern uint8_t joypadCurrent;
 extern const UWORD BlackAndWhitePalette[];
 
 uint8_t RandomNumber(uint8_t min, uint8_t max);
+uint16_t sqrt(uint16_t x);
 
 #endif

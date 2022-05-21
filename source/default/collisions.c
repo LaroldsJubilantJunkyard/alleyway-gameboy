@@ -70,6 +70,11 @@ void CollidePaddleAgainstBall(){
             // Let the xspeed of the paddle lightly affect things
             ballVelocityX+=paddleXSpeed/20;
 
+            // Prevent stoping the ball horizontally
+            if(ballVelocityX>>4==0){
+                ballVelocityX=(SIGN(paddleXSpeed)*3)>>4;
+            }
+
             // Increase Speed slightly with each bounce
             SpeedUpBall();
 
@@ -97,7 +102,7 @@ void CollideBricksAgainstBall(){
 
         IncreaseScore(5);
 
-        UpdateTile(check,ballX>>4,checkVertical);
+        UpdateBrick(check,ballX>>4,checkVertical);
     }
     
 
@@ -114,6 +119,6 @@ void CollideBricksAgainstBall(){
         IncreaseScore(5);
 
         
-        UpdateTile(check,checkHorizontal,ballY>>4);
+        UpdateBrick(check,checkHorizontal,ballY>>4);
     }
 }

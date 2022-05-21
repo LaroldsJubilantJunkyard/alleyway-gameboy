@@ -11,6 +11,22 @@ void ResetBall(){
     ballVelocityX=0;
     ballVelocityY=0;
 }
+
+void DeflectBall(int16_t normalX, int16_t normalY){
+
+
+    int16_t dot = ((normalX*(ballVelocityX)) +(normalY*(ballVelocityY)));
+
+    if(dot>0)return;
+
+    int32_t forceX = ((-dot)*normalX)*2;
+    int32_t forceY = ((-dot)*normalY)*2;
+
+    ballVelocityX +=forceX;
+    ballVelocityY += forceY;
+
+}
+
 uint8_t UpdateBall(uint8_t lastSprite){
 
 
@@ -39,6 +55,6 @@ uint8_t UpdateBall(uint8_t lastSprite){
 void SpeedUpBall(){
 
     // Increase Speed slightly with each bounce
-    ballVelocityY=(ballVelocityY/100)*101;
-    ballVelocityX=(ballVelocityX/100)*101;
+    ballVelocityY=(ballVelocityY/100)*105;
+    ballVelocityX=(ballVelocityX/100)*105;
 }

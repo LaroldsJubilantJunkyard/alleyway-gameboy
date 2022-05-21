@@ -24,15 +24,16 @@ uint8_t checkTopOrBottomCollision(uint8_t x, uint8_t  y){
     uint8_t topMissing = (brick-1)>=12&&(brick-1)<15; 
 
     // Return if it's the top or bottom
-    if(y>=mid && !bottomMissing)return BOTTOM;
-    if(y<mid && !topMissing)return TOP;
+    if((y/4)%2!=0 && !bottomMissing)return BOTTOM;
+    if((y/4)%2==0  && !topMissing)return TOP;
 
     // 
     return 0;
 
 }
 
-void UpdateTile(uint8_t side, uint8_t x, uint8_t  y){
+
+void UpdateBrick(uint8_t side, uint8_t x, uint8_t  y){
 
     uint8_t column=x/8;
     uint8_t row=y/8;
@@ -44,20 +45,36 @@ void UpdateTile(uint8_t side, uint8_t x, uint8_t  y){
     if(brick==0) return;
     if(brick>=USERINTERFACE_TILES_START)return;
 
-    uint8_t brickRow= (brick-1)%4;
-    uint8_t brickTopType = (brick-1)/4;
+    uint8_t brickRow= 0;
 
-    if(brickRow>=3)set_bkg_tile_xy(column,row,0);
+    side = (y/4)%2==0?TOP:BOTTOM;
+
+    // Clearing the brick
+    // If we're top only or bottom only
+    if((brick==4||brick==8||brick==12)&&side==TOP)set_bkg_tile_xy(column,row,0);
+    else if(brick>=13&&side==BOTTOM)set_bkg_tile_xy(column,row,0);
     else{
-        if(side==BOTTOM)set_bkg_tile_xy(column,row,brick+(3-brickRow));
-        else set_bkg_tile_xy(column,row,13+brickTopType);
+
+        uint8_t nextTile=brick;
+        if(side==BOTTOM){
+            if(brick>=1&&brick<=3)nextTile=4;
+            else if(brick>=5&&brick<=7)nextTile=8;
+            else if(brick>=9&&brick<=11)nextTile=12;
+        }
+        else if(side==TOP){
+            if(brick>=1&&brick<=3)nextTile=13;
+            else if(brick>=5&&brick<=7)nextTile=14;
+            else if(brick>=9&&brick<=11)nextTile=15;
+        }
+
+        set_bkg_tile_xy(column,row,nextTile);
     }
 
 
 }
 
 
-void UpdateBackgroundFull(uint8_t *level){
+void DrawLevelBricks(uint8_t *level){
 
     blocksLeft=0;
 
