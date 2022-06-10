@@ -57,7 +57,7 @@ void CollideBricksAgainstBall(){
     int16_t checkHorizontal = (ballX>>4)+horizontalSide*BALL_RADIUS;
     int16_t checkVertical = (ballY>>4)+verticalSide*BALL_RADIUS;
 
-    uint8_t check = checkTopOrBottomCollision(ballX>>4,checkVertical);
+    uint8_t check = CheckTopOrBottomBrick(ballX>>4,checkVertical);
 
     if(check!=0){
 
@@ -91,7 +91,7 @@ void CollideBricksAgainstBall(){
     }
     
 
-    check = checkTopOrBottomCollision(checkHorizontal,ballY>>4);
+    check = CheckTopOrBottomBrick(checkHorizontal,ballY>>4);
 
     if(check!=0){
 

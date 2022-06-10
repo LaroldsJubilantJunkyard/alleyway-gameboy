@@ -83,14 +83,19 @@ void main(void){
         // Update the paddle
         uint8_t lastSprite = UpdatePaddle();
 
+        // If the ball is ready
         if(ballState==BALLSTATE_READY){
 
+            // Reset it's position
             ballX=BALLSTART_X;
             ballY=BALLSTART_Y;
             
             lastSprite = move_metasprite(ball_metasprites[0],paddle_TILE_COUNT,lastSprite,(ballX>>4)+7,(ballY>>4)+15);
 
+            // If the A button was JUST pressed
             if((joypadCurrent & J_A) && !(joypadPrevious & J_A)){
+
+                // The ball is now active
                 ballState=BALLSTATE_ACTIVE;
 
                 // Randomly choose left or right
