@@ -4,39 +4,6 @@
 #include "brick.h"
 #include "userinterface.h"
 
-void BounceAgainstTheWalls(){
-    if((ballY>>4)<=8+BALL_RADIUS){
-
-
-        ballY=(8+BALL_RADIUS+1)<<4;
-
-        ballVelocityY=ABS(ballVelocityY);
-
-        // Increase Speed slightly with each bounce
-        SpeedUpBall();
-        
-    }
-    if((ballX>>4)<=8+BALL_RADIUS){
-
-
-        ballX=(8+BALL_RADIUS+1)<<4;
-        ballVelocityX=ABS(ballVelocityX);
-
-        // Increase Speed slightly with each bounce
-        SpeedUpBall();
-    }
-    
-    if((ballX>>4)>=120-BALL_RADIUS){
-        
-        ballX=(120-BALL_RADIUS-1)<<4;
-        ballVelocityX=-ABS(ballVelocityX);
-
-        // Increase Speed slightly with each bounce
-        SpeedUpBall();
-    }
-
-}
-
 
 void CollidePaddleAgainstBall(){
     int16_t xd = (int16_t)(ballX>>4)-(int16_t)(paddleX>>4);
@@ -53,6 +20,12 @@ void CollidePaddleAgainstBall(){
 
             // Flip the y velocity
             ballVelocityY=-ballVelocityY;
+            
+            NR10_REG=0X2B;
+            NR11_REG=0X81;
+            NR12_REG=0X41;
+            NR13_REG=0X5C;
+            NR14_REG=0X86;
 
             if(xd>paddleSize/2-PADDLE_HALF_THICKNESS){
                 if(paddleX<ballX){
@@ -66,14 +39,6 @@ void CollidePaddleAgainstBall(){
                 }
             }
             ballY=MIN(ballY,paddleY-((1+PADDLE_HALF_THICKNESS+BALL_RADIUS)<<4));
-
-            // Let the xspeed of the paddle lightly affect things
-            ballVelocityX+=paddleXSpeed/20;
-
-            // Prevent stoping the ball horizontally
-            if(ballVelocityX>>4==0){
-                ballVelocityX=(SIGN(paddleXSpeed)*3)>>4;
-            }
 
             // Increase Speed slightly with each bounce
             SpeedUpBall();
@@ -98,27 +63,66 @@ void CollideBricksAgainstBall(){
 
         ballVelocityY=-verticalSide*ABS(ballVelocityY);
         ballVelocityY+=SIGN(ballVelocityY)*BALL_SPEEDUP;
-        blocksLeft--;
 
-        IncreaseScore(5);
+        // If we didn't hit a wall
+        if(check!=WALL){
+            
+            blocksLeft--;
 
-        UpdateBrick(check,ballX>>4,checkVertical);
+            NR10_REG=0X00;
+            NR11_REG=0X81;
+            NR12_REG=0X43;
+            NR13_REG=0X73;
+            NR14_REG=0X86;
+
+            IncreaseScore(5);
+
+            UpdateBrick(check,ballX>>4,checkVertical);
+        }else{
+            NR10_REG=0X4A;
+            NR11_REG=0X81;
+            NR12_REG=0X43;
+            NR13_REG=0X56;
+            NR14_REG=0X86;
+        }
+
+        // Increase Speed slightly with each bounce
+        SpeedUpBall();
     }
     
 
     check = checkTopOrBottomCollision(checkHorizontal,ballY>>4);
 
-    
-
     if(check!=0){
 
         ballVelocityX=-horizontalSide*ABS(ballVelocityX);
         ballVelocityX+=SIGN(ballVelocityX)*BALL_SPEEDUP;
-        blocksLeft--;
 
-        IncreaseScore(5);
+        // If we didn't hit a wall
+        if(check!=WALL){
+            blocksLeft--;
 
-        
-        UpdateBrick(check,checkHorizontal,ballY>>4);
+            NR10_REG=0X00;
+            NR11_REG=0X81;
+            NR12_REG=0X43;
+            NR13_REG=0X73;
+            NR14_REG=0X86;
+
+
+            IncreaseScore(5);
+
+            
+            UpdateBrick(check,checkHorizontal,ballY>>4);
+        }else{
+            
+            NR10_REG=0X4A;
+            NR11_REG=0X81;
+            NR12_REG=0X43;
+            NR13_REG=0X56;
+            NR14_REG=0X86;
+        }
+
+        // Increase Speed slightly with each bounce
+        SpeedUpBall();
     }
 }

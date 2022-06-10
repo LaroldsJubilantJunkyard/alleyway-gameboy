@@ -18,10 +18,10 @@ const uint8_t level[AREA_TOTAL]={
     NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,
     NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,
     NO____BRICK,NO____BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,NO____BRICK,NO____BRICK,
+    NO____BRICK,NO____BRICK,MED___BRICK,MED___BRICK,MED___BRICK,MED___BRICK,MED___BRICK,MED___BRICK,MED___BRICK,MED___BRICK,MED___BRICK,MED___BRICK,NO____BRICK,NO____BRICK,
+    NO____BRICK,NO____BRICK,MED___BRICK,MED___BRICK,MED___BRICK,MED___BRICK,MED___BRICK,MED___BRICK,MED___BRICK,MED___BRICK,MED___BRICK,MED___BRICK,NO____BRICK,NO____BRICK,
     NO____BRICK,NO____BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,NO____BRICK,NO____BRICK,
-    NO____BRICK,NO____BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,NO____BRICK,NO____BRICK,
-    NO____BRICK,NO____BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,NO____BRICK,NO____BRICK,
-    NO____BRICK,NO____BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,LGHT__BRICK,NO____BRICK,NO____BRICK,
+    NO____BRICK,NO____BRICK,DRK___BRICK,DRK___BRICK,DRK___BRICK,DRK___BRICK,DRK___BRICK,DRK___BRICK,DRK___BRICK,DRK___BRICK,DRK___BRICK,DRK___BRICK,NO____BRICK,NO____BRICK,
     NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,
     NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,
     NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,
@@ -34,7 +34,16 @@ const uint8_t level[AREA_TOTAL]={
     NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK,NO____BRICK
 };
 
+void ResetToReady(){
+    ballState = BALLSTATE_READY;
+    score=0;
 
+    ResetUserInterface();
+
+    DrawLevelBricks(level);
+    ResetPaddle();
+    ResetBall();
+}
 
 
 void main(void){
@@ -43,6 +52,11 @@ void main(void){
     SHOW_SPRITES;
     SHOW_BKG;
     SPRITES_8x8;
+
+    // Turn on sound
+    NR52_REG = 0x80;
+    NR51_REG = 0xFF;
+    NR50_REG = 0x77;
 
     set_sprite_palette(0,1,BlackAndWhitePalette);
     set_bkg_palette(0,1,BlackAndWhitePalette);
@@ -56,22 +70,10 @@ void main(void){
 
 
     topScore=0;
-
-    GameplayStart:
-
-    score=0;
     stage=0;
 
-    ResetUserInterface();
- 
 
-    LevelStart:
-
-    ballState = BALLSTATE_READY;
-
-    DrawLevelBricks(level);
-    ResetPaddle();
-    ResetBall();
+    ResetToReady();
 
     while(1){
 
@@ -103,9 +105,16 @@ void main(void){
             // Update the ball
             ballState=UpdateBall(lastSprite);
 
-            BounceAgainstTheWalls();
             CollideBricksAgainstBall();
             CollidePaddleAgainstBall();
+
+            if(blocksLeft==0){
+
+                stage++;
+
+                ResetToReady();
+
+            }
         }
 
 

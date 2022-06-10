@@ -29,6 +29,7 @@
 #define EMPTY 0
 #define TOP 0x02
 #define BOTTOM 0x01
+#define WALL 0x03
 #define FULL TOP & BOTTOM
 
 #define LGHT__BRICK 1
@@ -65,6 +66,5 @@ extern uint8_t joypadCurrent;
 extern const UWORD BlackAndWhitePalette[];
 
 uint8_t RandomNumber(uint8_t min, uint8_t max);
-uint16_t sqrt(uint16_t x);
 
 #endif

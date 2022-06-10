@@ -12,39 +12,18 @@ void ResetBall(){
     ballVelocityY=0;
 }
 
-void DeflectBall(int16_t normalX, int16_t normalY){
-
-
-    int16_t dot = ((normalX*(ballVelocityX)) +(normalY*(ballVelocityY)));
-
-    if(dot>0)return;
-
-    int32_t forceX = ((-dot)*normalX)*2;
-    int32_t forceY = ((-dot)*normalY)*2;
-
-    ballVelocityX +=forceX;
-    ballVelocityY += forceY;
-
-}
-
 uint8_t UpdateBall(uint8_t lastSprite){
 
-
+    // Move according to our velocity
     ballX+=ballVelocityX>>4;
     ballY+=ballVelocityY>>4;
 
+    // if the ball is at the bottom of the screen
     if((ballY>>4)>144){
 
         // Reset the gameplay
         return 0;
     }
-
-    if(blocksLeft==0){
-
-        /// Reset to gameplay
-        ///goto GameplayStart;
-    }
-
 
     lastSprite = move_metasprite(ball_metasprites[0],paddle_TILE_COUNT,lastSprite,(ballX>>4)+7,(ballY>>4)+15);
 
@@ -54,7 +33,7 @@ uint8_t UpdateBall(uint8_t lastSprite){
 
 void SpeedUpBall(){
 
-    // Increase Speed slightly with each bounce
-    ballVelocityY=(ballVelocityY/100)*105;
-    ballVelocityX=(ballVelocityX/100)*105;
+    // Increase Speed slightly
+    ballVelocityY=(ballVelocityY/40)*42;
+    ballVelocityX=(ballVelocityX/40)*42;
 }
