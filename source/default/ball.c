@@ -29,11 +29,3 @@ uint8_t UpdateBall(uint8_t lastSprite){
 
     return 1;
 }
-
-
-void SpeedUpBall(){
-
-    // Increase Speed slightly
-    ballVelocityY=(ballVelocityY/40)*42;
-    ballVelocityX=(ballVelocityX/40)*42;
-}

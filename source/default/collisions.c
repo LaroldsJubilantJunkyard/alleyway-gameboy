@@ -57,18 +57,22 @@ void CollideBricksAgainstBall(){
     int16_t checkHorizontal = (ballX>>4)+horizontalSide*BALL_RADIUS;
     int16_t checkVertical = (ballY>>4)+verticalSide*BALL_RADIUS;
 
-    uint8_t check = CheckTopOrBottomBrick(ballX>>4,checkVertical);
+    uint8_t topBottomOrWall = CheckTopOrBottomBrick(ballX>>4,checkVertical);
 
-    if(check!=0){
+    // If the ball hit something
+    if(topBottomOrWall!=0){
 
         ballVelocityY=-verticalSide*ABS(ballVelocityY);
+
+        // Increase Speed slightly with each bounce
         ballVelocityY+=SIGN(ballVelocityY)*BALL_SPEEDUP;
 
         // If we didn't hit a wall
-        if(check!=WALL){
+        if(topBottomOrWall!=WALL){
             
             blocksLeft--;
 
+            // Play a sound
             NR10_REG=0X00;
             NR11_REG=0X81;
             NR12_REG=0X43;
@@ -77,31 +81,39 @@ void CollideBricksAgainstBall(){
 
             IncreaseScore(5);
 
-            UpdateBrick(check,ballX>>4,checkVertical);
+            UpdateBrick(topBottomOrWall,ballX>>4,checkVertical);
         }else{
+
+            // Play a sound
             NR10_REG=0X4A;
             NR11_REG=0X81;
             NR12_REG=0X43;
             NR13_REG=0X56;
             NR14_REG=0X86;
         }
-
-        // Increase Speed slightly with each bounce
-        SpeedUpBall();
     }
     
 
-    check = CheckTopOrBottomBrick(checkHorizontal,ballY>>4);
+    topBottomOrWall = CheckTopOrBottomBrick(checkHorizontal,ballY>>4);
 
-    if(check!=0){
 
+    // If the ball hit something
+    if(topBottomOrWall!=0){
+
+        // Reflect 
         ballVelocityX=-horizontalSide*ABS(ballVelocityX);
+
+        // Increase Speed slightly with each bounce
         ballVelocityX+=SIGN(ballVelocityX)*BALL_SPEEDUP;
 
         // If we didn't hit a wall
-        if(check!=WALL){
+        if(topBottomOrWall!=WALL){
+
+            // Decrease how many bullets we have
             blocksLeft--;
 
+
+            // Play a sound
             NR10_REG=0X00;
             NR11_REG=0X81;
             NR12_REG=0X43;
@@ -111,18 +123,17 @@ void CollideBricksAgainstBall(){
 
             IncreaseScore(5);
 
-            
-            UpdateBrick(check,checkHorizontal,ballY>>4);
+            // Update the brick at the location
+            UpdateBrick(topBottomOrWall,checkHorizontal,ballY>>4);
         }else{
             
+
+            // Play a sound
             NR10_REG=0X4A;
             NR11_REG=0X81;
             NR12_REG=0X43;
             NR13_REG=0X56;
             NR14_REG=0X86;
         }
-
-        // Increase Speed slightly with each bounce
-        SpeedUpBall();
     }
 }
