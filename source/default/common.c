@@ -9,7 +9,6 @@ uint16_t blocksLeft=0;
 uint16_t ballX=0;
 uint16_t ballY=0;
 uint16_t ballAngle = 45;
-uint8_t ballSpeed=1;
 int16_t ballVelocityX=0;
 int16_t ballVelocityY=0;
 

@@ -37,8 +37,7 @@
 #define DRK___BRICK 11
 #define NO____BRICK 255
 
-#define BRICKS_TILES_START 0
-#define USERINTERFACE_TILES_START Bricks_TILE_COUNT+BRICKS_TILES_START
+#define USERINTERFACE_TILES_START Bricks_TILE_COUNT
 #define FONT_TILES_START UserInterface_TILE_COUNT+USERINTERFACE_TILES_START
 
 extern uint16_t paddleX;
@@ -49,7 +48,6 @@ extern uint16_t blocksLeft;
 extern uint16_t ballX;
 extern uint16_t ballY;
 extern uint16_t ballAngle;
-extern uint8_t ballSpeed;
 extern int16_t ballVelocityX;
 extern int16_t ballVelocityY;
 

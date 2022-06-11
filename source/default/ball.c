@@ -7,7 +7,6 @@ void ResetBall(){
         
     ballX=BALLSTART_X;
     ballY=BALLSTART_Y;
-    ballSpeed=2;
     ballVelocityX=0;
     ballVelocityY=0;
 }

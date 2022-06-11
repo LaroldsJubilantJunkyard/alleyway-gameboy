@@ -61,7 +61,7 @@ void main(void){
     set_sprite_palette(0,1,BlackAndWhitePalette);
     set_bkg_palette(0,1,BlackAndWhitePalette);
 
-    set_bkg_data(BRICKS_TILES_START,Bricks_TILE_COUNT,Bricks_tiles);
+    set_bkg_data(0,Bricks_TILE_COUNT,Bricks_tiles);
     set_bkg_data(USERINTERFACE_TILES_START,UserInterface_TILE_COUNT,UserInterface_tiles);
     set_bkg_data(FONT_TILES_START,Font_TILE_COUNT,Font_tiles);
 
