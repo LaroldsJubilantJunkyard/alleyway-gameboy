@@ -8,7 +8,6 @@ void ResetPaddle(){
     paddleX=80<<4;
     paddleY=130<<4;
     paddleXSpeed=0;
-    paddleSize=24;
 
 }
 uint8_t UpdatePaddle(){
@@ -40,5 +39,5 @@ uint8_t UpdatePaddle(){
         paddleX=LEFT_PADDLE_LIMIT;
         paddleXSpeed=ABS((paddleXSpeed)/4)*2;
     }
-    return move_metasprite(paddle_metasprites[15-(paddleSize-16)],0,0,(paddleX>>4)+8,(paddleY>>4)+16);
+    return move_metasprite(paddle_metasprites[0],0,0,(paddleX>>4)+8,(paddleY>>4)+16);
 }

@@ -16,8 +16,10 @@
 #define BALLSTATE_READY 0
 #define BALLSTATE_ACTIVE 1
 
-#define LEFT_PADDLE_LIMIT ((8+paddleSize/2)<<4)
-#define RIGHT_PADDLE_LIMIT ((120-paddleSize/2)<<4)
+#define PADDLE_SIZE 32
+
+#define LEFT_PADDLE_LIMIT ((8+PADDLE_SIZE/2)<<4)
+#define RIGHT_PADDLE_LIMIT ((120-PADDLE_SIZE/2)<<4)
 
 #define BALL_SPEEDUP 3
 #define PADDLE_HALF_THICKNESS 2

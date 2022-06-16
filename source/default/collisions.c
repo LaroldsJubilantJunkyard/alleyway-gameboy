@@ -2,6 +2,7 @@
 #include "common.h"
 #include "ball.h"
 #include "brick.h"
+#include "paddle.h"
 #include "userinterface.h"
 
 
@@ -27,21 +28,18 @@ void CollidePaddleAgainstBall(){
             NR13_REG=0X5C;
             NR14_REG=0X86;
 
-            if(xd>paddleSize/2-PADDLE_HALF_THICKNESS){
+            if(xd>PADDLE_SIZE/2-PADDLE_HALF_THICKNESS){
                 if(paddleX<ballX){
                     // Use the negative absolute value so it goes right
                     ballVelocityX=ABS(ballVelocityX);
-                    ballX=MAX(ballX,paddleX+1+paddleSize/2+((PADDLE_HALF_THICKNESS-BALL_RADIUS)<<4));
+                    ballX=MAX(ballX,paddleX+1+PADDLE_SIZE/2+((PADDLE_HALF_THICKNESS-BALL_RADIUS)<<4));
                 }else{
                     // Use the negative absolute value so it goes left
                     ballVelocityX=-ABS(ballVelocityX);
-                    ballX=MIN(ballX,paddleX-1-paddleSize/2-((PADDLE_HALF_THICKNESS-BALL_RADIUS)<<4));
+                    ballX=MIN(ballX,paddleX-1-PADDLE_SIZE/2-((PADDLE_HALF_THICKNESS-BALL_RADIUS)<<4));
                 }
             }
             ballY=MIN(ballY,paddleY-((1+PADDLE_HALF_THICKNESS+BALL_RADIUS)<<4));
-
-            // Increase Speed slightly with each bounce
-            SpeedUpBall();
 
         }
 

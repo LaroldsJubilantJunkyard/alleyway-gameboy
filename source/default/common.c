@@ -17,7 +17,6 @@ uint16_t score=0,topScore=0;
 
 uint8_t ballState = BALLSTATE_READY;
 
-uint8_t paddleSize=16;
 
 uint8_t joypadPrevious=0;
 uint8_t joypadCurrent=0;
