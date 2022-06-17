@@ -58,7 +58,6 @@ extern uint16_t score,topScore;
 
 extern uint8_t ballState;
 
-extern uint8_t paddleSize;
 
 extern uint8_t joypadPrevious;
 extern uint8_t joypadCurrent;

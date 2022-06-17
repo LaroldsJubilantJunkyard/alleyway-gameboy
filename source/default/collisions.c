@@ -11,7 +11,7 @@ void CollidePaddleAgainstBall(){
 
     xd = ABS(xd);
 
-    if(xd<=paddleSize/2+BALL_RADIUS){
+    if(xd<=PADDLE_SIZE/2+BALL_RADIUS){
 
         int16_t yd =(int16_t)(ballY>>4)-(int16_t)(paddleY>>4);
 
